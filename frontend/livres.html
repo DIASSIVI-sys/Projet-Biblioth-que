@@ -12,6 +12,32 @@
   <main class="content">
     <h1>Liste des livres</h1>
 
+    <!-- Formulaire d'ajout d'auteur -->
+    <section class="form-section">
+      <h2>Ajouter un auteur</h2>
+      <form id="form-auteur">
+        <input type="text" id="auteur-nom" placeholder="Nom de l'auteur" required>
+        <input type="text" id="auteur-nationalite" placeholder="Nationalité">
+        <button type="submit">Ajouter l'auteur</button>
+      </form>
+      <p id="auteur-message"></p>
+    </section>
+
+     <!-- Formulaire d'ajout de livre -->
+    <section class="form-section">
+      <h2>Ajouter un livre</h2>
+      <form id="form-livre">
+        <input type="text" id="titre" placeholder="Titre" required>
+        <input type="number" id="annee_publication" placeholder="Année de publication">
+        <select id="id_auteur" required>
+          <option value="">-- Choisir un auteur --</option>
+        </select>
+        <button type="submit">Ajouter le livre</button>
+      </form>
+      <p id="livre-message"></p>
+    </section>
+
+
     <table id="livres-table">
       <thead>
         <tr>
@@ -27,6 +53,7 @@
 
   <script src="./assets/js/sidebar.js"></script>
   <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/auteurs.js"></script>
   <script src="./assets/js/livres.js"></script>
 </body>
 </html>
