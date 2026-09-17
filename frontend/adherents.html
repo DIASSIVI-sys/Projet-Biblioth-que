@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Adhérents - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    
+<body data-page="adherents">
+
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <h1>Liste des adhérents</h1>
+
+    <table id="adherents-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tbody id="adherents-body"></tbody>
+    </table>
+  </main>
+
+  <script src="./assets/js/sidebar.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/adherents.js"></script>
 </body>
 </html>

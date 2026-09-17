@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
-
+const cors = require('cors');
 const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
 // 1. D'abord, le middleware pour lire le JSON
 app.use(express.json());
+app.use(cors());
 app.use(logger);
 
 // 2. Ensuite, on importe la route et on l'utilise
