@@ -11,6 +11,16 @@
 
   <main class="content">
     <h1>Liste des adhérents</h1>
+    
+     <section class="form-section">
+      <h2>Ajouter un adhérent</h2>
+      <form id="form-adherent">
+        <input type="text" id="nom" placeholder="Nom" required>
+        <input type="text" id="contact" placeholder="Contact (email ou téléphone)">
+        <button type="submit">Ajouter</button>
+      </form>
+      <p id="form-message"></p>
+    </section>
 
     <table id="adherents-table">
       <thead>
