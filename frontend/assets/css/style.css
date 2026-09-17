@@ -58,6 +58,7 @@ th, td {
 th {
   background-color: #f1f5f9;
 }
+/*aletre ereur et succès*/
 
 .erreur { color: #dc2626; margin-top: 5px; }
 .succes { color: #16a34a; margin-top: 5px; }
@@ -74,4 +75,30 @@ form input {
   margin-right: 10px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
+}
+
+.ligne-retard {
+  background-color: #fef2f2;
+}
+
+.ligne-en-cours {
+  background-color: #f0fdf4;
+}
+
+.badge-retard {
+  background-color: #dc2626;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+
+.badge-cours {
+  background-color: #16a34a;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  margin-right: 8px;
 }

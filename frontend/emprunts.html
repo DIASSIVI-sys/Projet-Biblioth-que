@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Emprunts - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    
+<body data-page="emprunts">
+
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <h1>Gestion des emprunts</h1>
+
+    <!-- Formulaire de création d'emprunt -->
+    <section class="form-section">
+      <h2>Enregistrer un emprunt</h2>
+      <form id="form-emprunt">
+        <select id="id_adherent" required>
+          <option value="">-- Choisir un adhérent --</option>
+        </select>
+        <select id="id_livre" required>
+          <option value="">-- Choisir un livre disponible --</option>
+        </select>
+        <input type="date" id="date_retour_prevue" required>
+        <button type="submit">Enregistrer l'emprunt</button>
+      </form>
+      <p id="emprunt-message"></p>
+    </section>
+
+    <h2>Emprunts en cours</h2>
+    <table id="emprunts-table">
+      <thead>
+        <tr>
+          <th>Adhérent</th>
+          <th>Livre</th>
+          <th>Date emprunt</th>
+          <th>Date retour prévue</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="emprunts-body"></tbody>
+    </table>
+  </main>
+
+  <script src="./assets/js/sidebar.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/emprunts.js"></script>
 </body>
 </html>
