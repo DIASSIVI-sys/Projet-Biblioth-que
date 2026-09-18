@@ -102,3 +102,51 @@ form input {
   font-size: 0.85rem;
   margin-right: 8px;
 }
+
+/*CSS tableau de bord*/
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.stat-card-alerte p {
+  color: #dc2626;
+}
+
+.stats-highlight {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.highlight-card {
+  background: #eff6ff;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.highlight-card h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
