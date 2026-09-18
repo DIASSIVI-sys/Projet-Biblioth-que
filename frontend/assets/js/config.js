@@ -1,1 +1,1 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://projet-biblioth-que-backend.onrender.com/api';
