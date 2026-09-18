@@ -1,6 +1,26 @@
 let pageCourante = 1;
 const limiteParPage = 5;
 
+// Ouverture modale en mode AJOUT
+document.getElementById('btn-ouvrir-modal').addEventListener('click', () => {
+  document.getElementById('form-livre').reset();
+  document.getElementById('livre-id').value = '';
+  document.getElementById('modal-titre').innerHTML = '<i class="fa-solid fa-book"></i> Ajouter un livre';
+  document.getElementById('btn-submit-livre').innerHTML = '<i class="fa-solid fa-check"></i> Ajouter';
+  document.getElementById('livre-message').textContent = '';
+  document.getElementById('modal-overlay').classList.add('modal-ouverte');
+});
+
+document.getElementById('btn-fermer-modal').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+});
+
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-overlay') {
+    document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+  }
+});
+
 // Charger la liste des livres (avec recherche + pagination)
 async function chargerLivres() {
   try {
@@ -23,14 +43,18 @@ async function chargerLivres() {
 
     livres.forEach(livre => {
       const tr = document.createElement('tr');
+      const statutHtml = livre.statut === 'disponible'
+        ? '<span class="badge-cours"><i class="fa-solid fa-circle-check"></i> disponible</span>'
+        : '<span class="badge-retard"><i class="fa-solid fa-circle-xmark"></i> emprunté</span>';
+
       tr.innerHTML = `
         <td>${livre.titre}</td>
         <td>${livre.auteur_nom}</td>
         <td>${livre.annee_publication || '-'}</td>
-        <td>${livre.statut}</td>
+        <td>${statutHtml}</td>
         <td>
-          <button onclick="modifierLivre(${livre.id_livre})">Modifier</button>
-          <button onclick="supprimerLivre(${livre.id_livre})">Supprimer</button>
+          <button onclick='ouvrirModaleModification(${JSON.stringify(livre)})'><i class="fa-solid fa-pen"></i></button>
+          <button onclick="supprimerLivre(${livre.id_livre})"><i class="fa-solid fa-trash"></i></button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -42,7 +66,7 @@ async function chargerLivres() {
   }
 }
 
-// Charger les auteurs dans le select du formulaire livre
+// Charger les auteurs dans le select du formulaire
 async function chargerAuteursDansSelect() {
   try {
     const response = await fetch(`${API_URL}/auteurs`);
@@ -62,18 +86,35 @@ async function chargerAuteursDansSelect() {
   }
 }
 
-// Soumission du formulaire livre
+// Ouvre la modale en mode MODIFICATION, pré-remplie
+function ouvrirModaleModification(livre) {
+  document.getElementById('livre-id').value = livre.id_livre;
+  document.getElementById('titre').value = livre.titre;
+  document.getElementById('annee_publication').value = livre.annee_publication || '';
+  document.getElementById('id_auteur').value = livre.id_auteur;
+  document.getElementById('modal-titre').innerHTML = '<i class="fa-solid fa-pen"></i> Modifier le livre';
+  document.getElementById('btn-submit-livre').innerHTML = '<i class="fa-solid fa-check"></i> Enregistrer';
+  document.getElementById('livre-message').textContent = '';
+  document.getElementById('modal-overlay').classList.add('modal-ouverte');
+}
+
+// Soumission du formulaire — gère AJOUT et MODIFICATION selon la présence de l'id
 document.getElementById('form-livre').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const id = document.getElementById('livre-id').value;
   const titre = document.getElementById('titre').value;
   const annee_publication = document.getElementById('annee_publication').value;
   const id_auteur = document.getElementById('id_auteur').value;
   const messageEl = document.getElementById('livre-message');
 
+  const estModification = id !== '';
+  const url = estModification ? `${API_URL}/livres/${id}` : `${API_URL}/livres`;
+  const methode = estModification ? 'PUT' : 'POST';
+
   try {
-    const response = await fetch(`${API_URL}/livres`, {
-      method: 'POST',
+    const response = await fetch(url, {
+      method: methode,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ titre, annee_publication, id_auteur })
     });
@@ -86,45 +127,20 @@ document.getElementById('form-livre').addEventListener('submit', async (e) => {
       return;
     }
 
-    messageEl.textContent = 'Livre ajouté avec succès';
+    messageEl.textContent = estModification ? 'Livre modifié avec succès' : 'Livre ajouté avec succès';
     messageEl.className = 'succes';
-    document.getElementById('form-livre').reset();
     chargerLivres();
+
+    setTimeout(() => {
+      document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+      document.getElementById('form-livre').reset();
+      messageEl.textContent = '';
+    }, 1000);
   } catch (err) {
-    messageEl.textContent = "Erreur lors de l'ajout du livre";
+    messageEl.textContent = "Erreur lors de l'enregistrement";
     messageEl.className = 'erreur';
   }
 });
-
-// Modifier un livre
-async function modifierLivre(id) {
-  const nouveauTitre = prompt('Nouveau titre :');
-  if (!nouveauTitre) return;
-  const nouvelleAnnee = prompt('Nouvelle année de publication :');
-  const nouvelIdAuteur = prompt('Nouvel id_auteur :');
-
-  try {
-    const response = await fetch(`${API_URL}/livres/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        titre: nouveauTitre,
-        annee_publication: nouvelleAnnee,
-        id_auteur: nouvelIdAuteur
-      })
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      alert(data.message);
-      return;
-    }
-
-    chargerLivres();
-  } catch (err) {
-    alert('Erreur lors de la modification');
-  }
-}
 
 // Supprimer un livre
 async function supprimerLivre(id) {
