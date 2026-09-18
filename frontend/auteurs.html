@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Auteurs - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body data-page="auteurs">
+
+  <button id="menu-toggle" class="menu-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <div class="page-header">
+      <h1><i class="fa-solid fa-feather"></i> Gestion des auteurs</h1>
+      <button id="btn-ouvrir-modal" class="btn-principal">
+        <i class="fa-solid fa-plus"></i> Ajouter un auteur
+      </button>
+    </div>
+
+    <table id="auteurs-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Nationalité</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="auteurs-body"></tbody>
+    </table>
+  </main>
+
+  <!-- Modale d'ajout / modification -->
+<div id="modal-overlay" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-titre"><i class="fa-solid fa-feather"></i> Ajouter un auteur</h2>
+      <button id="btn-fermer-modal" class="btn-fermer"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="form-auteur">
+      <input type="hidden" id="auteur-id">
+      <input type="text" id="auteur-nom" placeholder="Nom de l'auteur" required>
+      <input type="text" id="auteur-nationalite" placeholder="Nationalité">
+      <button type="submit" id="btn-submit-auteur" class="btn-principal">
+        <i class="fa-solid fa-check"></i> Ajouter
+      </button>
+    </form>
+    <p id="auteur-message"></p>
+  </div>
+</div>
+  <script src="assets/js/sidebar.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auteurs.js"></script>
+</body>
+</html>

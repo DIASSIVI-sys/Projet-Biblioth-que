@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <title>Emprunts - Bibliothèque</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body data-page="emprunts">
 
+<button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
   <div id="sidebar-container"></div>
 
   <main class="content">
-    <h1>Gestion des emprunts</h1>
+    <h1><i class="fa-solid fa-arrow-right-arrow-left"></i> Gestion des emprunts</h1>
 
     <!-- Formulaire de création d'emprunt -->
     <section class="form-section">
@@ -29,6 +33,14 @@
     </section>
 
     <h2>Emprunts en cours</h2>
+    <div class="search-section">
+  <select id="filtre-statut">
+    <option value="tous">Tous les emprunts</option>
+    <option value="en-cours">En cours (à temps)</option>
+    <option value="en-retard">En retard</option>
+  </select>
+</div>
+
     <table id="emprunts-table">
       <thead>
         <tr>

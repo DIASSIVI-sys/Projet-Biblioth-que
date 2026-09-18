@@ -1,3 +1,68 @@
+
+let empruntsActuels = []; // stocke la liste complète pour filtrer sans refaire d'appel API
+
+// Charger la liste des emprunts en cours (avec distinction retard)
+async function chargerEmpruntsEnCours() {
+  try {
+    const response = await fetch(`${API_URL}/emprunts/en-cours`);
+    empruntsActuels = await response.json();
+    appliquerFiltre();
+  } catch (err) {
+    console.error('Erreur lors du chargement des emprunts', err);
+  }
+}
+
+// Affiche une liste d'emprunts donnée
+function afficherEmprunts(emprunts) {
+  const tbody = document.getElementById('emprunts-body');
+  tbody.innerHTML = '';
+
+  if (emprunts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5">Aucun emprunt trouvé</td></tr>';
+    return;
+  }
+
+  const aujourdHui = new Date().toISOString().split('T')[0];
+
+  emprunts.forEach(emprunt => {
+    const enRetard = emprunt.date_retour_prevue < aujourdHui;
+    const tr = document.createElement('tr');
+    tr.className = enRetard ? 'ligne-retard' : 'ligne-en-cours';
+
+    tr.innerHTML = `
+      <td>${emprunt.adherent_nom}</td>
+      <td>${emprunt.livre_titre}</td>
+      <td>${emprunt.date_emprunt}</td>
+      <td>${emprunt.date_retour_prevue}</td>
+      <td>
+        ${enRetard ? '<span class="badge-retard">En retard</span>' : '<span class="badge-cours">En cours</span>'}
+        <button onclick="retournerLivre(${emprunt.id})">Marquer comme rendu</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Applique le filtre sélectionné sur la liste déjà chargée
+function appliquerFiltre() {
+  const filtre = document.getElementById('filtre-statut').value;
+  const aujourdHui = new Date().toISOString().split('T')[0];
+
+  let empruntsFiltres = empruntsActuels;
+
+  if (filtre === 'en-retard') {
+    empruntsFiltres = empruntsActuels.filter(e => e.date_retour_prevue < aujourdHui);
+  } else if (filtre === 'en-cours') {
+    empruntsFiltres = empruntsActuels.filter(e => e.date_retour_prevue >= aujourdHui);
+  }
+  // si filtre === 'tous', on garde empruntsActuels tel quel
+
+  afficherEmprunts(empruntsFiltres);
+}
+
+// Écouteur sur le select
+document.getElementById('filtre-statut').addEventListener('change', appliquerFiltre);
+
 // Charger les adhérents dans le select
 async function chargerAdherentsDansSelect() {
   try {
@@ -41,43 +106,7 @@ async function chargerLivresDisponiblesDansSelect() {
   }
 }
 
-// Charger la liste des emprunts en cours (avec distinction retard)
-async function chargerEmpruntsEnCours() {
-  try {
-    const response = await fetch(`${API_URL}/emprunts/en-cours`);
-    const emprunts = await response.json();
 
-    const tbody = document.getElementById('emprunts-body');
-    tbody.innerHTML = '';
-
-    if (emprunts.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5">Aucun emprunt en cours</td></tr>';
-      return;
-    }
-
-    const aujourdHui = new Date().toISOString().split('T')[0];
-
-    emprunts.forEach(emprunt => {
-      const enRetard = emprunt.date_retour_prevue < aujourdHui;
-      const tr = document.createElement('tr');
-      tr.className = enRetard ? 'ligne-retard' : 'ligne-en-cours';
-
-      tr.innerHTML = `
-        <td>${emprunt.adherent_nom}</td>
-        <td>${emprunt.livre_titre}</td>
-        <td>${emprunt.date_emprunt}</td>
-        <td>${emprunt.date_retour_prevue}</td>
-        <td>
-          ${enRetard ? '<span class="badge-retard">En retard</span>' : '<span class="badge-cours">En cours</span>'}
-          <button onclick="retournerLivre(${emprunt.id})">Marquer comme rendu</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error('Erreur lors du chargement des emprunts', err);
-  }
-}
 
 // Soumission du formulaire d'emprunt
 document.getElementById('form-emprunt').addEventListener('submit', async (e) => {

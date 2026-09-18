@@ -17,9 +17,36 @@ async function chargerStats() {
     document.getElementById('stat-adherent-actif').textContent = adherentActif
       ? `${adherentActif.nom} (${adherentActif.nb_total_emprunts} emprunts)`
       : 'Aucune donnée';
+
+    afficherGraphique(stats);
   } catch (err) {
     console.error('Erreur lors du chargement des statistiques', err);
   }
+}
+
+function afficherGraphique(stats) {
+  const ctx = document.getElementById('graphique-emprunts');
+
+  const enCoursNonRetard = stats.total_emprunts_en_cours - stats.total_emprunts_en_retard;
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['En cours (à temps)', 'En retard'],
+      datasets: [{
+        data: [enCoursNonRetard, stats.total_emprunts_en_retard],
+        backgroundColor: ['#16a34a', '#dc2626'],
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
 }
 
 chargerStats();

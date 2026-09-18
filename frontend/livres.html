@@ -3,27 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Livres - Bibliothèque</title>
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body data-page="livres">
-
+<button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
   <div id="sidebar-container"></div>
 
   <main class="content">
-    <h1>Liste des livres</h1>
+    <h1><i class="fa-solid fa-book"></i> Gestion des livres</h1>
 
-    <!-- Formulaire d'ajout d'auteur -->
-    <section class="form-section">
-      <h2>Ajouter un auteur</h2>
-      <form id="form-auteur">
-        <input type="text" id="auteur-nom" placeholder="Nom de l'auteur" required>
-        <input type="text" id="auteur-nationalite" placeholder="Nationalité">
-        <button type="submit">Ajouter l'auteur</button>
-      </form>
-      <p id="auteur-message"></p>
-    </section>
-
-     <!-- Formulaire d'ajout de livre -->
     <section class="form-section">
       <h2>Ajouter un livre</h2>
       <form id="form-livre">
@@ -32,12 +23,17 @@
         <select id="id_auteur" required>
           <option value="">-- Choisir un auteur --</option>
         </select>
-        <button type="submit">Ajouter le livre</button>
+        <button type="submit"><i class="fa-solid fa-plus"></i> Ajouter le livre</button>
       </form>
       <p id="livre-message"></p>
     </section>
 
+    <section class="search-section">
+      <input type="text" id="recherche" placeholder="Rechercher par titre ou auteur...">
+      <button id="btn-recherche">Rechercher</button>
+    </section>
 
+    <h2>Liste des livres</h2>
     <table id="livres-table">
       <thead>
         <tr>
@@ -45,15 +41,21 @@
           <th>Auteur</th>
           <th>Année</th>
           <th>Statut</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="livres-body"></tbody>
     </table>
+
+    <div class="pagination">
+      <button id="btn-precedent">← Précédent</button>
+      <span id="page-actuelle">Page 1</span>
+      <button id="btn-suivant">Suivant →</button>
+    </div>
   </main>
 
   <script src="./assets/js/sidebar.js"></script>
   <script src="./assets/js/config.js"></script>
-  <script src="./assets/js/auteurs.js"></script>
   <script src="./assets/js/livres.js"></script>
 </body>
 </html>

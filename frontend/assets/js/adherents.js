@@ -7,11 +7,20 @@ async function chargerAdherents() {
     const tbody = document.getElementById('adherents-body');
     tbody.innerHTML = '';
 
+    if (adherents.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3">Aucun adhérent enregistré</td></tr>';
+      return;
+    }
+
     adherents.forEach(adherent => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${adherent.nom}</td>
         <td>${adherent.contact || '-'}</td>
+        <td>
+          <button onclick="modifierAdherent(${adherent.id_adherent})">Modifier</button>
+          <button onclick="supprimerAdherent(${adherent.id_adherent})">Supprimer</button>
+        </td>
       `;
       tbody.appendChild(tr);
     });
@@ -52,6 +61,52 @@ document.getElementById('form-adherent').addEventListener('submit', async (e) =>
     messageEl.className = 'erreur';
   }
 });
+
+// Modifier un adhérent
+async function modifierAdherent(id) {
+  const nouveauNom = prompt('Nouveau nom :');
+  if (!nouveauNom) return;
+  const nouveauContact = prompt('Nouveau contact :');
+
+  try {
+    const response = await fetch(`${API_URL}/adherents/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nom: nouveauNom, contact: nouveauContact })
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.message);
+      return;
+    }
+
+    chargerAdherents();
+  } catch (err) {
+    alert('Erreur lors de la modification');
+  }
+}
+
+// Supprimer un adhérent
+async function supprimerAdherent(id) {
+  if (!confirm('Supprimer cet adhérent ?')) return;
+
+  try {
+    const response = await fetch(`${API_URL}/adherents/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.message);
+      return;
+    }
+
+    chargerAdherents();
+  } catch (err) {
+    alert('Erreur lors de la suppression');
+  }
+}
 
 // Initialisation
 chargerAdherents();
