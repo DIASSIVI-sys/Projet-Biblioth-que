@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Adhérents - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body data-page="adherents">
+    <button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+   <h1><i class="fa-solid fa-users"></i> Gestion des adhérents</h1>
     
+     <section class="form-section">
+      <h2>Ajouter un adhérent</h2>
+      <form id="form-adherent">
+        <input type="text" id="nom" placeholder="Nom" required>
+        <input type="text" id="contact" placeholder="Contact (email ou téléphone)">
+        <button type="submit">Ajouter</button>
+      </form>
+      <p id="form-message"></p>
+    </section>
+
+    <table id="adherents-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="adherents-body"></tbody>
+    </table>
+  </main>
+
+  <script src="./assets/js/sidebar.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/adherents.js"></script>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Livres - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body data-page="livres">
+<button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <h1><i class="fa-solid fa-book"></i> Gestion des livres</h1>
+
+    <section class="form-section">
+      <h2>Ajouter un livre</h2>
+      <form id="form-livre">
+        <input type="text" id="titre" placeholder="Titre" required>
+        <input type="number" id="annee_publication" placeholder="Année de publication">
+        <select id="id_auteur" required>
+          <option value="">-- Choisir un auteur --</option>
+        </select>
+        <button type="submit"><i class="fa-solid fa-plus"></i> Ajouter le livre</button>
+      </form>
+      <p id="livre-message"></p>
+    </section>
+
+    <section class="search-section">
+      <input type="text" id="recherche" placeholder="Rechercher par titre ou auteur...">
+      <button id="btn-recherche">Rechercher</button>
+    </section>
+
+    <h2>Liste des livres</h2>
+    <table id="livres-table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Auteur</th>
+          <th>Année</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="livres-body"></tbody>
+    </table>
+
+    <div class="pagination">
+      <button id="btn-precedent">← Précédent</button>
+      <span id="page-actuelle">Page 1</span>
+      <button id="btn-suivant">Suivant →</button>
+    </div>
+  </main>
+
+  <script src="./assets/js/sidebar.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/livres.js"></script>
+</body>
+</html>
