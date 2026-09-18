@@ -7,23 +7,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body data-page="adherents">
-    <button id="menu-toggle" class="menu-toggle">
-  <i class="fa-solid fa-bars"></i>
-</button>
+
+  <button id="menu-toggle" class="menu-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
   <div id="sidebar-container"></div>
 
   <main class="content">
-   <h1><i class="fa-solid fa-users"></i> Gestion des adhérents</h1>
-    
-     <section class="form-section">
-      <h2>Ajouter un adhérent</h2>
-      <form id="form-adherent">
-        <input type="text" id="nom" placeholder="Nom" required>
-        <input type="text" id="contact" placeholder="Contact (email ou téléphone)">
-        <button type="submit">Ajouter</button>
-      </form>
-      <p id="form-message"></p>
-    </section>
+    <div class="page-header">
+      <h1><i class="fa-solid fa-users"></i> Gestion des adhérents</h1>
+      <button id="btn-ouvrir-modal" class="btn-principal">
+        <i class="fa-solid fa-plus"></i> Ajouter un adhérent
+      </button>
+    </div>
 
     <table id="adherents-table">
       <thead>
@@ -36,6 +33,46 @@
       <tbody id="adherents-body"></tbody>
     </table>
   </main>
+
+  <!-- Modale ajout / modification -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-titre"><i class="fa-solid fa-user-plus"></i> Ajouter un adhérent</h2>
+        <button id="btn-fermer-modal" class="btn-fermer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="form-adherent">
+        <input type="hidden" id="adherent-id">
+        <input type="text" id="nom" placeholder="Nom" required>
+        <input type="text" id="contact" placeholder="Contact (email ou téléphone)">
+        <button type="submit" id="btn-submit-adherent" class="btn-principal">
+          <i class="fa-solid fa-check"></i> Ajouter
+        </button>
+      </form>
+      <p id="form-message"></p>
+    </div>
+  </div>
+
+  <!-- Modale historique des emprunts -->
+  <div id="modal-historique-overlay" class="modal-overlay">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h2 id="historique-titre"><i class="fa-solid fa-clock-rotate-left"></i> Historique des emprunts</h2>
+        <button id="btn-fermer-historique" class="btn-fermer"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <table id="historique-table">
+        <thead>
+          <tr>
+            <th>Livre</th>
+            <th>Date emprunt</th>
+            <th>Date retour prévue</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody id="historique-body"></tbody>
+      </table>
+    </div>
+  </div>
 
   <script src="./assets/js/sidebar.js"></script>
   <script src="./assets/js/config.js"></script>

@@ -1,3 +1,23 @@
+// Ouverture modale en mode AJOUT
+document.getElementById('btn-ouvrir-modal').addEventListener('click', () => {
+  document.getElementById('form-adherent').reset();
+  document.getElementById('adherent-id').value = '';
+  document.getElementById('modal-titre').innerHTML = '<i class="fa-solid fa-user-plus"></i> Ajouter un adhérent';
+  document.getElementById('btn-submit-adherent').innerHTML = '<i class="fa-solid fa-check"></i> Ajouter';
+  document.getElementById('form-message').textContent = '';
+  document.getElementById('modal-overlay').classList.add('modal-ouverte');
+});
+
+document.getElementById('btn-fermer-modal').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+});
+
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-overlay') {
+    document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+  }
+});
+
 // Charger la liste des adhérents
 async function chargerAdherents() {
   try {
@@ -18,8 +38,9 @@ async function chargerAdherents() {
         <td>${adherent.nom}</td>
         <td>${adherent.contact || '-'}</td>
         <td>
-          <button onclick="modifierAdherent(${adherent.id_adherent})">Modifier</button>
-          <button onclick="supprimerAdherent(${adherent.id_adherent})">Supprimer</button>
+          <button onclick='voirHistorique(${adherent.id_adherent}, "${adherent.nom}")'><i class="fa-solid fa-clock-rotate-left"></i></button>
+          <button onclick='ouvrirModaleModification(${JSON.stringify(adherent)})'><i class="fa-solid fa-pen"></i></button>
+          <button onclick="supprimerAdherent(${adherent.id_adherent})"><i class="fa-solid fa-trash"></i></button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -29,17 +50,33 @@ async function chargerAdherents() {
   }
 }
 
-// Soumission du formulaire d'ajout
+// Ouvre la modale en mode MODIFICATION, pré-remplie
+function ouvrirModaleModification(adherent) {
+  document.getElementById('adherent-id').value = adherent.id_adherent;
+  document.getElementById('nom').value = adherent.nom;
+  document.getElementById('contact').value = adherent.contact || '';
+  document.getElementById('modal-titre').innerHTML = '<i class="fa-solid fa-pen"></i> Modifier l\'adhérent';
+  document.getElementById('btn-submit-adherent').innerHTML = '<i class="fa-solid fa-check"></i> Enregistrer';
+  document.getElementById('form-message').textContent = '';
+  document.getElementById('modal-overlay').classList.add('modal-ouverte');
+}
+
+// Soumission du formulaire — gère AJOUT et MODIFICATION selon la présence de l'id
 document.getElementById('form-adherent').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const id = document.getElementById('adherent-id').value;
   const nom = document.getElementById('nom').value;
   const contact = document.getElementById('contact').value;
   const messageEl = document.getElementById('form-message');
 
+  const estModification = id !== '';
+  const url = estModification ? `${API_URL}/adherents/${id}` : `${API_URL}/adherents`;
+  const methode = estModification ? 'PUT' : 'POST';
+
   try {
-    const response = await fetch(`${API_URL}/adherents`, {
-      method: 'POST',
+    const response = await fetch(url, {
+      method: methode,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nom, contact })
     });
@@ -52,40 +89,20 @@ document.getElementById('form-adherent').addEventListener('submit', async (e) =>
       return;
     }
 
-    messageEl.textContent = 'Adhérent ajouté avec succès';
+    messageEl.textContent = estModification ? 'Adhérent modifié avec succès' : 'Adhérent ajouté avec succès';
     messageEl.className = 'succes';
-    document.getElementById('form-adherent').reset();
     chargerAdherents();
+
+    setTimeout(() => {
+      document.getElementById('modal-overlay').classList.remove('modal-ouverte');
+      document.getElementById('form-adherent').reset();
+      messageEl.textContent = '';
+    }, 1000);
   } catch (err) {
-    messageEl.textContent = "Erreur lors de l'ajout de l'adhérent";
+    messageEl.textContent = "Erreur lors de l'enregistrement";
     messageEl.className = 'erreur';
   }
 });
-
-// Modifier un adhérent
-async function modifierAdherent(id) {
-  const nouveauNom = prompt('Nouveau nom :');
-  if (!nouveauNom) return;
-  const nouveauContact = prompt('Nouveau contact :');
-
-  try {
-    const response = await fetch(`${API_URL}/adherents/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nom: nouveauNom, contact: nouveauContact })
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      alert(data.message);
-      return;
-    }
-
-    chargerAdherents();
-  } catch (err) {
-    alert('Erreur lors de la modification');
-  }
-}
 
 // Supprimer un adhérent
 async function supprimerAdherent(id) {
@@ -105,6 +122,54 @@ async function supprimerAdherent(id) {
     chargerAdherents();
   } catch (err) {
     alert('Erreur lors de la suppression');
+  }
+}
+
+// Fermeture de la modale historique
+document.getElementById('btn-fermer-historique').addEventListener('click', () => {
+  document.getElementById('modal-historique-overlay').classList.remove('modal-ouverte');
+});
+
+document.getElementById('modal-historique-overlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-historique-overlay') {
+    document.getElementById('modal-historique-overlay').classList.remove('modal-ouverte');
+  }
+});
+
+// Afficher l'historique des emprunts d'un adhérent
+async function voirHistorique(id, nom) {
+  try {
+    const response = await fetch(`${API_URL}/adherents/${id}/emprunts`);
+    const emprunts = await response.json();
+
+    document.getElementById('historique-titre').innerHTML =
+      `<i class="fa-solid fa-clock-rotate-left"></i> Historique — ${nom}`;
+
+    const tbody = document.getElementById('historique-body');
+    tbody.innerHTML = '';
+
+    if (emprunts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4">Aucun emprunt enregistré</td></tr>';
+    } else {
+      emprunts.forEach(emprunt => {
+        const tr = document.createElement('tr');
+        const statut = emprunt.date_retour_reelle
+          ? `<span class="badge-cours">Rendu le ${emprunt.date_retour_reelle}</span>`
+          : `<span class="badge-retard">En cours</span>`;
+
+        tr.innerHTML = `
+          <td>${emprunt.titre}</td>
+          <td>${emprunt.date_emprunt}</td>
+          <td>${emprunt.date_retour_prevue}</td>
+          <td>${statut}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('modal-historique-overlay').classList.add('modal-ouverte');
+  } catch (err) {
+    console.error("Erreur lors du chargement de l'historique", err);
   }
 }
 

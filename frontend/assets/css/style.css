@@ -432,15 +432,40 @@ tbody tr:hover {
     margin-top: 8px;
   }
 
-  /* Tableaux scrollables horizontalement plutôt que débordants */
+  /* Tableaux scrollables horizontalement */
   table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
 
+  /* Colonne Action : boutons alignés et centrés proprement */
+  table td:last-child,
+  table th:last-child {
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  table td:last-child {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+
+  /* Les boutons dans les tableaux ne prennent plus toute la largeur sur mobile */
+  table button {
+    width: auto;
+    flex-shrink: 0;
+  }
+
   .pagination {
     flex-wrap: wrap;
+  }
+
+  .pagination button {
+    width: auto;
   }
 }
 
@@ -565,4 +590,11 @@ tbody tr:hover {
     width: 95%;
     padding: 20px;
   }
+  .modal-large {
+  max-width: 600px;
+}
+
+.modal-large table {
+  box-shadow: none;
+}
 }
