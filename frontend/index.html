@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de bord - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-page="index">
+
+<button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <h1><i class="fa-solid fa-gauge"></i> Tableau de bord</h1>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Livres</h3>
+        <p id="stat-livres">-</p>
+      </div>
+      <div class="stat-card">
+        <h3>Adhérents</h3>
+        <p id="stat-adherents">-</p>
+      </div>
+      <div class="stat-card">
+        <h3>Emprunts en cours</h3>
+        <p id="stat-en-cours">-</p>
+      </div>
+      <div class="stat-card stat-card-alerte">
+        <h3>Emprunts en retard</h3>
+        <p id="stat-en-retard">-</p>
+      </div>
+    </div>
+
+    <div class="stats-highlight">
+      <div class="highlight-card">
+        <h3><i class="fa-solid fa-book"></i> Livre le plus emprunté</h3>
+        <p id="stat-livre-populaire">Aucune donnée</p>
+      </div>
+      <div class="highlight-card">
+        <h3><i class="fa-solid fa-user"></i> Adhérent le plus actif</h3>
+        <p id="stat-adherent-actif">Aucune donnée</p>
+      </div>
+    </div>
+
+    <!-- Graphique -->
+    <div class="chart-container">
+      <h2>Répartition des emprunts</h2>
+      <canvas id="graphique-emprunts"></canvas>
+    </div>
+  </main>
+
+  <script src="assets/js/sidebar.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/stats.js"></script>
+</body>
+</html>

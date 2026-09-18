@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Emprunts - Bibliothèque</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body data-page="emprunts">
+
+<button id="menu-toggle" class="menu-toggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
+  <div id="sidebar-container"></div>
+
+  <main class="content">
+    <h1><i class="fa-solid fa-arrow-right-arrow-left"></i> Gestion des emprunts</h1>
+
+    <!-- Formulaire de création d'emprunt -->
+    <section class="form-section">
+      <h2>Enregistrer un emprunt</h2>
+      <form id="form-emprunt">
+        <select id="id_adherent" required>
+          <option value="">-- Choisir un adhérent --</option>
+        </select>
+        <select id="id_livre" required>
+          <option value="">-- Choisir un livre disponible --</option>
+        </select>
+        <input type="date" id="date_retour_prevue" required>
+        <button type="submit">Enregistrer l'emprunt</button>
+      </form>
+      <p id="emprunt-message"></p>
+    </section>
+
+    <h2>Emprunts en cours</h2>
+    <div class="search-section">
+  <select id="filtre-statut">
+    <option value="tous">Tous les emprunts</option>
+    <option value="en-cours">En cours (à temps)</option>
+    <option value="en-retard">En retard</option>
+  </select>
+</div>
+
+    <table id="emprunts-table">
+      <thead>
+        <tr>
+          <th>Adhérent</th>
+          <th>Livre</th>
+          <th>Date emprunt</th>
+          <th>Date retour prévue</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="emprunts-body"></tbody>
+    </table>
+  </main>
+
+  <script src="./assets/js/sidebar.js"></script>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/emprunts.js"></script>
+</body>
+</html>
