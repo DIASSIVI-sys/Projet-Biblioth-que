@@ -41,9 +41,6 @@ exports.getOne=async(req,res,next)=>{
 exports.create=async(req,res,next)=>{
     try{
         const {titre,id_auteur,annee_publication}=req.body;
-        /*if(!titre || !id_auteur || !annee_publication){
-            return res.status(400).json({message:'Titre, id_auteur et annee_publication sont requis'});
-        }*/
         const result =await pool.query('INSERT INTO livres (titre,id_auteur,annee_publication) VALUES ($1,$2,$3) RETURNING *',[titre,id_auteur,annee_publication]);
         res.status(201).json(result.rows[0]);
     }catch(err){
