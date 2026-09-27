@@ -1,7 +1,6 @@
+let empruntsActuels = [];
 
-let empruntsActuels = []; // stocke la liste complète pour filtrer sans refaire d'appel API
-
-// Charger la liste des emprunts en cours (avec distinction retard)
+// Charger la liste des emprunts en cours
 async function chargerEmpruntsEnCours() {
   try {
     const response = await fetch(`${API_URL}/emprunts/en-cours`);
@@ -35,15 +34,17 @@ function afficherEmprunts(emprunts) {
       <td>${emprunt.date_emprunt}</td>
       <td>${emprunt.date_retour_prevue}</td>
       <td>
-        ${enRetard ? '<span class="badge-retard">En retard</span>' : '<span class="badge-cours">En cours</span>'}
-        <button onclick="retournerLivre(${emprunt.id})">Marquer comme rendu</button>
+        ${enRetard
+          ? '<span class="badge-retard"><i class="fa-solid fa-triangle-exclamation"></i> En retard</span>'
+          : '<span class="badge-cours"><i class="fa-solid fa-clock"></i> En cours</span>'}
+        <button onclick="retournerLivre(${emprunt.id})"><i class="fa-solid fa-rotate-left"></i> Retour</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-// Applique le filtre sélectionné sur la liste déjà chargée
+// Applique le filtre sélectionné
 function appliquerFiltre() {
   const filtre = document.getElementById('filtre-statut').value;
   const aujourdHui = new Date().toISOString().split('T')[0];
@@ -55,12 +56,10 @@ function appliquerFiltre() {
   } else if (filtre === 'en-cours') {
     empruntsFiltres = empruntsActuels.filter(e => e.date_retour_prevue >= aujourdHui);
   }
-  // si filtre === 'tous', on garde empruntsActuels tel quel
 
   afficherEmprunts(empruntsFiltres);
 }
 
-// Écouteur sur le select
 document.getElementById('filtre-statut').addEventListener('change', appliquerFiltre);
 
 // Charger les adhérents dans le select
@@ -83,12 +82,11 @@ async function chargerAdherentsDansSelect() {
   }
 }
 
-// Charger uniquement les livres disponibles dans le select
+// Charger uniquement les livres disponibles
 async function chargerLivresDisponiblesDansSelect() {
   try {
     const response = await fetch(`${API_URL}/livres`);
     const livres = await response.json();
-    console.log('Livres chargés pour le select:', livres); // Ajouté pour le débogage
 
     const select = document.getElementById('id_livre');
     select.innerHTML = '<option value="">-- Choisir un livre disponible --</option>';
@@ -105,8 +103,6 @@ async function chargerLivresDisponiblesDansSelect() {
     console.error('Erreur lors du chargement des livres', err);
   }
 }
-
-
 
 // Soumission du formulaire d'emprunt
 document.getElementById('form-emprunt').addEventListener('submit', async (e) => {
@@ -135,7 +131,7 @@ document.getElementById('form-emprunt').addEventListener('submit', async (e) => 
     messageEl.textContent = 'Emprunt enregistré avec succès';
     messageEl.className = 'succes';
     document.getElementById('form-emprunt').reset();
-    chargerLivresDisponiblesDansSelect(); // le livre emprunté ne doit plus apparaître
+    chargerLivresDisponiblesDansSelect();
     chargerEmpruntsEnCours();
   } catch (err) {
     messageEl.textContent = "Erreur lors de l'enregistrement de l'emprunt";
@@ -156,7 +152,7 @@ async function retournerLivre(idEmprunt) {
       return;
     }
 
-    chargerLivresDisponiblesDansSelect(); // le livre redevient disponible
+    chargerLivresDisponiblesDansSelect();
     chargerEmpruntsEnCours();
   } catch (err) {
     alert('Erreur lors de l\'enregistrement du retour');

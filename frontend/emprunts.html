@@ -8,17 +8,17 @@
 </head>
 <body data-page="emprunts">
 
-<button id="menu-toggle" class="menu-toggle">
-  <i class="fa-solid fa-bars"></i>
-</button>
+  <button id="menu-toggle" class="menu-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
   <div id="sidebar-container"></div>
 
   <main class="content">
     <h1><i class="fa-solid fa-arrow-right-arrow-left"></i> Gestion des emprunts</h1>
 
-    <!-- Formulaire de création d'emprunt -->
     <section class="form-section">
-      <h2>Enregistrer un emprunt</h2>
+      <h2><i class="fa-solid fa-plus"></i> Enregistrer un emprunt</h2>
       <form id="form-emprunt">
         <select id="id_adherent" required>
           <option value="">-- Choisir un adhérent --</option>
@@ -27,19 +27,21 @@
           <option value="">-- Choisir un livre disponible --</option>
         </select>
         <input type="date" id="date_retour_prevue" required>
-        <button type="submit">Enregistrer l'emprunt</button>
+        <button type="submit" class="btn-principal">
+          <i class="fa-solid fa-check"></i> Enregistrer
+        </button>
       </form>
       <p id="emprunt-message"></p>
     </section>
 
-    <h2>Emprunts en cours</h2>
-    <div class="search-section">
-  <select id="filtre-statut">
-    <option value="tous">Tous les emprunts</option>
-    <option value="en-cours">En cours (à temps)</option>
-    <option value="en-retard">En retard</option>
-  </select>
-</div>
+    <div class="page-header">
+      <h2><i class="fa-solid fa-list"></i> Emprunts en cours</h2>
+      <select id="filtre-statut">
+        <option value="tous">Tous les emprunts</option>
+        <option value="en-cours">En cours (à temps)</option>
+        <option value="en-retard">En retard</option>
+      </select>
+    </div>
 
     <table id="emprunts-table">
       <thead>
@@ -55,8 +57,8 @@
     </table>
   </main>
 
-  <script src="./assets/js/sidebar.js"></script>
-  <script src="./assets/js/config.js"></script>
-  <script src="./assets/js/emprunts.js"></script>
+  <script src="assets/js/sidebar.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/emprunts.js"></script>
 </body>
 </html>
