@@ -57,10 +57,20 @@ Exécutez le script SQL pour créer les tables et index[cite: 1] :
 Bash
 psql "postgresql://utilisateur:mot_de_passe@hote/bibliotheque_db" -f shema.sql
 
+## Choix de modélisation
+
+- **Clés primaires** : `id_auteur`, `id_adherent`, `id_livre` (auto-incrémentées avec `SERIAL`) pour plus de clarté dans les jointures.
+- **Statut du livre** : stocké directement comme colonne (`disponible` / `emprunte`) plutôt que déduit à chaque requête, pour des lectures plus rapides. Sécurisé par une contrainte `CHECK`.
+- **Dates d'emprunt** : `date_emprunt` (remplie automatiquement via `DEFAULT CURRENT_DATE`), `date_retour_prevue` (saisie par l'utilisateur), `date_retour_reelle` (NULL tant que le livre n'est pas rendu — permet de distinguer emprunts en cours et historique).
+- **Transactions** : la création et le retour d'un emprunt utilisent des transactions SQL (`BEGIN`/`COMMIT`/`ROLLBACK`) pour garantir la cohérence entre la table `emprunts` et le statut du livre.
+
+
 5. Démarrer le serveur
 Mode développement :
 Bash
 npm run dev
+
+Ouvre le dossier `frontend` avec un serveur local (ex. extension "Live Server" sur VS Code).
 
  ---Déploiement
 Backend : Déployé sur Render avec une configuration de base de données PostgreSQL distante (nécessitant l'activation du SSL : ssl: { rejectUnauthorized: false })[cite: 1].
@@ -82,4 +92,9 @@ GET /api/emprunts : Suivi des emprunts
 
 GET /api/stats : Statistiques de la bibliothèque
 
-çy
+## Fonctionnalités
+- CRUD complet : auteurs, livres, adhérents, emprunts
+- Recherche et pagination sur les livres
+- Détection automatique des emprunts en retard
+- Historique des emprunts par adhérent
+- Tableau de bord avec statistiques et graphique
